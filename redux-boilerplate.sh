@@ -3,13 +3,13 @@
 if [ -e package.json ]
 then
     echo "ok"
-    npm install --save redux react-redux redux-thunk redux-logger
+    # npm install --save redux react-redux redux-thunk redux-logger
 else
     echo "You are in a wrong Directory!"
     exit 0
 fi
 
-mkdir src src/actions src/reducers src/store
+mkdir src src/actions src/reducers src/store src/components
 cat > src/constants.js << EOF
 export const LOGGED_USER = "LOGGED_USER";
 EOF
@@ -22,10 +22,10 @@ import {
 // Example actions with thunk dispatch
 export function logUser(userObj) {
   return (dispatch,getState) => {
-        dispatch(logUser(userObj));
+        dispatch(logUserAction(userObj));
   };
 }
-function logUser(userObj) {
+function logUserAction(userObj) {
   console.log("Action Log User", userObj);
   const action = {
     type: LOGGED_USER,
@@ -63,6 +63,47 @@ import rootReducer from "../reducers";
 export default function configureStore() {
   return createStore(rootReducer, applyMiddleware(thunk,logger));
 }
+EOF
+
+cat > src/components/TestReduxComponent.jsx << EOF
+import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { logUser } from "../actions";
+
+class TestReduxComponent extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      flag: false
+    }
+  }
+
+  componentWillMount = () => {
+    this.props.logUser("Test User");
+  };
+
+  render() {
+    return (
+      <div className="TestReduxComponent">
+        Hi From Boilerplate Redux-Thunk
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+export default connect(mapStateToProps, { logUser })(TestReduxComponent);
+EOF
+
+cat > src/components/index.js << EOF
+import TestReduxComponent from "./TestReduxComponent";
+
+export { TestReduxComponent };
 EOF
 
 #Finally add store to Root Component
