@@ -20,13 +20,11 @@ import {
   LOGGED_USER
 } from "../constants";
 // Example actions with thunk dispatch
-
 export function logUser(userObj) {
   return (dispatch,getState) => {
         dispatch(logUser(userObj));
   };
 }
-
 function logUser(userObj) {
   console.log("Action Log User", userObj);
   const action = {
@@ -39,7 +37,6 @@ EOF
 
 cat > src/reducers/reducer_user.js << EOF
 import { LOGGED_USER } from "../constants";
-
 export default (state = null, action) => {
   switch (action.type) {
     case LOGGED_USER:
@@ -53,7 +50,6 @@ EOF
 cat > src/reducers/index.js << EOF
 import { combineReducers } from "redux";
 import user from "./reducer_user";
-
 export default combineReducers({
     user
 });
@@ -64,7 +60,6 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import logger from "redux-logger";
 import rootReducer from "../reducers";
-
 export default function configureStore() {
   return createStore(rootReducer, applyMiddleware(thunk,logger));
 }
@@ -74,7 +69,8 @@ EOF
 printf '\e[1;34m%-6s\e[m' "Success!
 Add these lines to your Root Component
 import { Provider } from 'react-redux';
-import configureStore from './src/store/configureStore';
+import configureStore from './store/configureStore';
+
 const store = configureStore();
 Wrap main component in <Provider store={store}> </Provider> 
 "
