@@ -3,7 +3,7 @@
 if [ -e package.json ]
 then
     echo "ok"
-    # npm install --save redux react-redux redux-thunk redux-logger
+     npm install --save redux react-redux redux-thunk redux-logger
 else
     echo "You are in a wrong Directory!"
     exit 0
